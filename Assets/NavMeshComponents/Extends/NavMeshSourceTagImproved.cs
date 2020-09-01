@@ -17,6 +17,12 @@ public class NavMeshSourceTagImproved : MonoBehaviour
     int m_DefaultArea;
     public int defaultArea { get { return m_DefaultArea; } set { m_DefaultArea = value; } }
     
+    // List of agent types the modifier is applied for.
+    // Special values: empty == None, m_AffectedAgents[0] =-1 == All.
+    [HideInInspector]
+    [SerializeField]
+    List<int> m_AffectedAgents = new List<int>(new int[] { -1 });    // Default value is All
+    
     public List<MeshFilter> selfMeshFilters { get; private set; }
     public List<Terrain> selfTerrains { get; private set; }
     public bool IncludeChildren = true;
@@ -74,15 +80,21 @@ public class NavMeshSourceTagImproved : MonoBehaviour
         }
     }
 
+    public bool CanAffect(int agentId)
+    {
+        return m_AffectedAgents != null && m_AffectedAgents.Count >0 && m_AffectedAgents[0] == -1 ||
+               m_AffectedAgents.Contains(agentId);
+    }
+
     // Collect all the navmesh build sources for enabled objects tagged by this component
-    public static void Collect(ref List<NavMeshBuildSource> sources)
+    public static void Collect(ref List<NavMeshBuildSource> sources,int agentId)
     {
         sources.Clear();
 
         for (var i = 0; i < m_Meshes.Count; ++i)
         {
             var mfTag = m_Meshes[i];
-            if (mfTag == null) continue;
+            if (mfTag == null || !mfTag.CanAffect(agentId)) continue;
             foreach (var meshFilter in mfTag.selfMeshFilters)
             {
                 var m = meshFilter.sharedMesh;
@@ -100,7 +112,7 @@ public class NavMeshSourceTagImproved : MonoBehaviour
         for (var i = 0; i < m_Terrains.Count; ++i)
         {
             var terrainTag = m_Terrains[i];
-            if (terrainTag == null) continue;
+            if (terrainTag == null || !terrainTag.CanAffect(agentId)) continue;
             foreach (var terrain in terrainTag.selfTerrains)
             {
                 var s = new NavMeshBuildSource();

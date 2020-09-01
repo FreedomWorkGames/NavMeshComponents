@@ -10,6 +10,7 @@ public class NavMeshSourceTagImprovedEditor : Editor
     SerializedProperty m_DefaultArea;
     private SerializedProperty IncludeChildren;
     private NavMeshSourceTagImproved targetComponent;
+    private SerializedProperty m_AffectedAgents;
     private bool m_includeChildrenTmp;
     private List<NavMeshSourceTagImproved> m_childrenTmp = new List<NavMeshSourceTagImproved>();
     private void OnEnable()
@@ -34,6 +35,7 @@ public class NavMeshSourceTagImprovedEditor : Editor
         } 
         
         m_DefaultArea = serializedObject.FindProperty("m_DefaultArea");
+        m_AffectedAgents = serializedObject.FindProperty("m_AffectedAgents");
 
         m_includeChildrenTmp = IncludeChildren.boolValue;
     }
@@ -44,7 +46,8 @@ public class NavMeshSourceTagImprovedEditor : Editor
         serializedObject.Update();
         //draw area
         NavMeshComponentsGUIUtility.AreaPopup("Default Area", m_DefaultArea);
-
+        
+        NavMeshComponentsGUIUtility.AgentMaskPopup("Affected Agents", m_AffectedAgents);
         if (IncludeChildren.boolValue != m_includeChildrenTmp)
         {
             if (IncludeChildren.boolValue)
