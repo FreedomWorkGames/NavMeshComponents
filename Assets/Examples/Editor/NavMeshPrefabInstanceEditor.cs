@@ -38,7 +38,7 @@ class NavMeshPrefabInstanceEditor : Editor
     void OnInspectorGUIPrefab(GameObject go)
     {
         var prefab = PrefabUtility.GetPrefabInstanceHandle(go);
-        var path = AssetDatabase.GetAssetPath(prefab);
+        var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(go);// AssetDatabase.GetAssetPath(prefab);
 
         if (prefab && string.IsNullOrEmpty(path))
         {
@@ -86,7 +86,7 @@ class NavMeshPrefabInstanceEditor : Editor
             var instance = (NavMeshPrefabInstance)tgt;
             var go = instance.gameObject;
             var prefab = PrefabUtility.GetPrefabInstanceHandle(go);
-            var path = AssetDatabase.GetAssetPath(prefab);
+            var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(go);// AssetDatabase.GetAssetPath(prefab);
 
             if (string.IsNullOrEmpty(path))
             {
@@ -106,7 +106,7 @@ class NavMeshPrefabInstanceEditor : Editor
             var instance = (NavMeshPrefabInstance)tgt;
             var go = instance.gameObject;
             var prefab = PrefabUtility.GetPrefabInstanceHandle(go);
-            var path = AssetDatabase.GetAssetPath(prefab);
+            var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(go);// AssetDatabase.GetAssetPath(prefab);
 
             if (string.IsNullOrEmpty(path))
             {
@@ -118,9 +118,11 @@ class NavMeshPrefabInstanceEditor : Editor
 
             // Store navmesh as a sub-asset of the prefab
             var navmesh = Build(instance);
-            AssetDatabase.AddObjectToAsset(navmesh, prefab);
+            var prefabAsset = AssetDatabase.LoadMainAssetAtPath(path);
+            AssetDatabase.AddObjectToAsset(navmesh, prefabAsset);
 
             instance.navMeshData = navmesh;
+            PrefabUtility.ApplyPrefabInstance(go,InteractionMode.AutomatedAction);
             AssetDatabase.SaveAssets();
         }
     }
