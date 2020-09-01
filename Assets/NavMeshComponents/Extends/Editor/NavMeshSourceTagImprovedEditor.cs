@@ -4,19 +4,19 @@ using UnityEditor.AI;
 using UnityEngine;
 using UnityEngine.AI;
 
-[CustomEditor(typeof(NavMeshSourceTagUseAgentAndArea))]
-public class NavMeshSourceTagUseAgentAndAreaEditor : Editor
+[CustomEditor(typeof(NavMeshSourceTagImproved))]
+public class NavMeshSourceTagImprovedEditor : Editor
 {
     SerializedProperty m_DefaultArea;
     private SerializedProperty IncludeChildren;
-    private NavMeshSourceTagUseAgentAndArea targetComponent;
+    private NavMeshSourceTagImproved targetComponent;
     private bool m_includeChildrenTmp;
-    private List<NavMeshSourceTagUseAgentAndArea> m_childrenTmp = new List<NavMeshSourceTagUseAgentAndArea>();
+    private List<NavMeshSourceTagImproved> m_childrenTmp = new List<NavMeshSourceTagImproved>();
     private void OnEnable()
     {
-        targetComponent = (target as NavMeshSourceTagUseAgentAndArea);
+        targetComponent = (target as NavMeshSourceTagImproved);
         IncludeChildren = serializedObject.FindProperty("IncludeChildren");
-        var parentTag = targetComponent.transform.parent? targetComponent.transform.parent.GetComponentInParent<NavMeshSourceTagUseAgentAndArea>() : null;
+        var parentTag = targetComponent.transform.parent? targetComponent.transform.parent.GetComponentInParent<NavMeshSourceTagImproved>() : null;
         if (parentTag != null && parentTag.IncludeChildren == true)//父节点有，并且勾选includeChildren，删除自己
         {
             DestroyImmediate(targetComponent);
@@ -25,7 +25,7 @@ public class NavMeshSourceTagUseAgentAndAreaEditor : Editor
         }
 
         m_childrenTmp.Clear();
-        targetComponent.GetComponentsInChildren<NavMeshSourceTagUseAgentAndArea>(m_childrenTmp); 
+        targetComponent.GetComponentsInChildren<NavMeshSourceTagImproved>(m_childrenTmp); 
         if (m_childrenTmp.Count>1)//子节点有，includeChildren为false
         {
             IncludeChildren.boolValue = false;
@@ -50,7 +50,7 @@ public class NavMeshSourceTagUseAgentAndAreaEditor : Editor
             if (IncludeChildren.boolValue)
             {
                 m_childrenTmp.Clear();
-                targetComponent.GetComponentsInChildren<NavMeshSourceTagUseAgentAndArea>(m_childrenTmp); 
+                targetComponent.GetComponentsInChildren<NavMeshSourceTagImproved>(m_childrenTmp); 
                 if (m_childrenTmp.Count>1)//子节点有，includeChildren为false
                 {
                     IncludeChildren.boolValue = false;

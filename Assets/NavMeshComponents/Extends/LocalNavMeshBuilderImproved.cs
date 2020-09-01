@@ -6,7 +6,7 @@ using NavMeshBuilder = UnityEngine.AI.NavMeshBuilder;
 
 // Build and update a localized navmesh from the sources marked by NavMeshSourceTag
 [DefaultExecutionOrder(-102)]
-public class LocalNavMeshBuilderUseAgent : MonoBehaviour
+public class LocalNavMeshBuilderImproved : MonoBehaviour
 {
     // The center of the build
     public Transform m_Tracked;
@@ -51,7 +51,7 @@ public class LocalNavMeshBuilderUseAgent : MonoBehaviour
 
     void UpdateNavMesh(bool asyncUpdate = false)
     {
-        NavMeshSourceTagUseAgentAndArea.Collect(ref m_Sources);
+        NavMeshSourceTagImproved.Collect(ref m_Sources);
         var buildSettings = NavMesh.GetSettingsByID(agentTypeID);
         var bounds = QuantizedBounds();
 

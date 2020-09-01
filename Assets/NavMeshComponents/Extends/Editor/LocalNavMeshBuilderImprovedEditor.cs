@@ -6,8 +6,8 @@ using UnityEditor.AI;
 using UnityEngine;
 using UnityEngine.AI;
 
-[CustomEditor(typeof(LocalNavMeshBuilderUseAgent))]
-public class LocalNavMeshBuilderUseAgentEditor : Editor
+[CustomEditor(typeof(LocalNavMeshBuilderImproved))]
+public class LocalNavMeshBuilderImprovedEditor : Editor
 {
     private SerializedProperty m_AgentTypeID;
 
